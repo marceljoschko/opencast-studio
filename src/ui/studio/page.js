@@ -10,8 +10,7 @@ import VideoSetup from './video-setup';
 import Recording from './recording';
 import Review from './review';
 
-import {isRecordingSupported} from '../../util';
-
+import { isRecordingSupported } from '../../util';
 
 export default function Wizard({ activeStep, updateActiveStep, userHasWebcam }) {
   // If recording is not supported we don't even let the user start the wizard.
@@ -22,8 +21,8 @@ export default function Wizard({ activeStep, updateActiveStep, userHasWebcam }) 
 
   return (
     <Steps activeStep={activeStep} updateActiveStep={updateActiveStep}>
-      <VideoSetup userHasWebcam={userHasWebcam} />
       <AudioSetup />
+      <VideoSetup userHasWebcam={userHasWebcam} />
       <Recording />
       <Review />
       <SaveCreation />
