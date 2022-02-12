@@ -7,12 +7,20 @@ const mergeHeightConstraint = (maxHeight, videoConstraints, fallbackIdeal) => {
 };
 
 export async function startAudioCapture(dispatch, deviceId = null) {
+  const constraints = {
+    audio: {
+      deviceId: deviceId ? { deviceId } : true,
+      channelCount: { ideal: 1 },
+      noiseSuppression: { ideal: false },
+      autoGainControl: { ideal: false },
+      sampleRate: { ideal: 48000 },
+    },
+    video: false,
+  };
+
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: deviceId ? { deviceId } : true,
-      video: false
-    });
-    stream.getTracks().forEach(track => {
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    stream.getTracks().forEach((track) => {
       track.onended = () => {
         dispatch({ type: 'AUDIO_UNEXPETED_END' });
       };
@@ -28,9 +36,7 @@ export async function startAudioCapture(dispatch, deviceId = null) {
 }
 
 export async function startDisplayCapture(dispatch, settings, videoConstraints = {}) {
-  const maxFps = settings.display?.maxFps
-    ? { frameRate: { max: settings.display.maxFps } }
-    : {};
+  const maxFps = settings.display?.maxFps ? { frameRate: { max: settings.display.maxFps } } : {};
   const height = mergeHeightConstraint(settings.display?.maxHeight, videoConstraints);
 
   const constraints = {
@@ -45,7 +51,7 @@ export async function startDisplayCapture(dispatch, settings, videoConstraints =
 
   try {
     const stream = await navigator.mediaDevices.getDisplayMedia(constraints);
-    stream.getTracks().forEach(track => {
+    stream.getTracks().forEach((track) => {
       track.onended = () => {
         dispatch({ type: 'DISPLAY_UNEXPETED_END' });
       };
@@ -61,9 +67,7 @@ export async function startDisplayCapture(dispatch, settings, videoConstraints =
 }
 
 export async function startUserCapture(dispatch, settings, videoConstraints) {
-  const maxFps = settings.camera?.maxFps
-    ? { frameRate: { max: settings.camera.maxFps } }
-    : {};
+  const maxFps = settings.camera?.maxFps ? { frameRate: { max: settings.camera.maxFps } } : {};
   const height = mergeHeightConstraint(settings.camera?.maxHeight, videoConstraints, 1080);
 
   const constraints = {
@@ -78,7 +82,7 @@ export async function startUserCapture(dispatch, settings, videoConstraints) {
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    stream.getTracks().forEach(track => {
+    stream.getTracks().forEach((track) => {
       track.onended = () => {
         dispatch({ type: 'USER_UNEXPETED_END' });
       };
@@ -101,16 +105,16 @@ export function stopCapture({ audioStream, displayStream, userStream }, dispatch
 }
 
 export function stopAudioCapture(stream, dispatch) {
-  stream?.getTracks().forEach(track => track.stop());
+  stream?.getTracks().forEach((track) => track.stop());
   dispatch({ type: 'UNSHARE_AUDIO' });
 }
 
 export function stopDisplayCapture(stream, dispatch) {
-  stream?.getTracks().forEach(track => track.stop());
+  stream?.getTracks().forEach((track) => track.stop());
   dispatch({ type: 'UNSHARE_DISPLAY' });
 }
 
 export function stopUserCapture(stream, dispatch) {
-  stream?.getTracks().forEach(track => track.stop());
+  stream?.getTracks().forEach((track) => track.stop());
   dispatch({ type: 'UNSHARE_USER' });
 }
