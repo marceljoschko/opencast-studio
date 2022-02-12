@@ -4,7 +4,6 @@ import { jsx } from 'theme-ui';
 import { createContext, useContext, useReducer } from 'react';
 import { isDisplayCaptureSupported, isUserCaptureSupported } from './util';
 
-
 export const AUDIO_SOURCE_MICROPHONE = 'microphone';
 export const AUDIO_SOURCE_NONE = 'none';
 
@@ -18,7 +17,6 @@ export const STATE_UPLOADING = 'uploading';
 export const STATE_UPLOADED = 'uploaded';
 export const STATE_ERROR = 'error';
 
-
 const initialState = () => ({
   mediaDevices: [],
 
@@ -26,6 +24,12 @@ const initialState = () => ({
   audioStream: null,
   audioUnexpectedEnd: false,
   audioSupported: isUserCaptureSupported(),
+
+  audioSettings: {
+    noiseSuppression: false,
+    equalizer: false,
+    compressor: false,
+  },
 
   displayAllowed: null,
   displayStream: null,
@@ -76,6 +80,15 @@ const reducer = (state, action) => {
         audioAllowed: true,
         audioUnexpectedEnd: false,
       };
+
+    case 'UPDATE_AUDIO_STREAM':
+      return {
+        ...state,
+        audioStream: action.payload,
+      };
+
+    case 'UPDATE_AUDIO_SETTINGS':
+      return { ...state, audioSettings: action.payload };
 
     case 'BLOCK_AUDIO':
       return { ...state, audioStream: null, audioAllowed: false, audioUnexpectedEnd: false };
@@ -134,31 +147,34 @@ const reducer = (state, action) => {
       // and the user ends up with strange recordings. Just to be sure, we
       // remove old recordings here.
       const recordings = [
-        ...state.recordings.filter(r => r.deviceType !== action.payload.deviceType),
+        ...state.recordings.filter((r) => r.deviceType !== action.payload.deviceType),
         action.payload,
       ];
       return { ...state, recordings };
 
     case 'UPLOAD_ERROR':
-      return { ...state, upload: { ...state.upload, error: action.payload, state: STATE_ERROR }};
+      return { ...state, upload: { ...state.upload, error: action.payload, state: STATE_ERROR } };
 
     case 'UPLOAD_REQUEST':
-      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADING }};
+      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADING } };
 
     case 'UPLOAD_SUCCESS':
-      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADED }};
+      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADED } };
 
     case 'UPLOAD_PROGRESS_UPDATE':
-      return { ...state, upload: {
-        ...state.upload,
-        secondsLeft: action.payload.secondsLeft,
-        currentProgress: action.payload.currentProgress,
-      }};
+      return {
+        ...state,
+        upload: {
+          ...state.upload,
+          secondsLeft: action.payload.secondsLeft,
+          currentProgress: action.payload.currentProgress,
+        },
+      };
 
     case 'MARK_DOWNLOADED':
-      const mapped = state.recordings.map((recording, index) => (
+      const mapped = state.recordings.map((recording, index) =>
         index === action.payload ? { ...recording, downloaded: true } : recording
-      ));
+      );
       return { ...state, recordings: mapped };
 
     case 'UPDATE_TITLE':
