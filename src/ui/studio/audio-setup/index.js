@@ -343,9 +343,8 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'start',
           flex: '1 0 auto',
-          maxHeight: '400px',
         }}
       >
         {body}

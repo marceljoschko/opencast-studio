@@ -28,16 +28,16 @@ export default function PreviewAudio({ stream }) {
   return (
     <canvas
       ref={canvasRef}
-      width='800px'
-      height='200px'
+      width="800px"
+      height="125px"
       sx={{
-        width: '100%',
-        maxHeight: '200px',
+        width: '80%',
+        maxHeight: '125px',
         minHeight: 0,
         flex: '1 0 70px',
         bg: 'rgba(0,0,0,0.8)',
         borderRadius: '7px',
-       }}
+      }}
     />
   );
 }
