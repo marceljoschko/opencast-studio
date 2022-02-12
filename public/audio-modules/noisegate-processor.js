@@ -1,4 +1,4 @@
-import { timeCoefficient, dBToAmp } from "./utils.js";
+import { timeCoefficient, dBToAmp } from "./utils";
 
 class NoiseGateProcessor extends AudioWorkletProcessor {
     constructor(options) {
