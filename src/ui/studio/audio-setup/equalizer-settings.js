@@ -150,6 +150,13 @@ export default function EqualizerSettings({}) {
     }
   }, [audioNodes]);
 
+  useEffect(() => {
+    if (equalizer) {
+      updateCurrent();
+      drawCurve();
+    }
+  }, [currentFilter]);
+
   const getEqResponse = (frequencies) => {
     const magCombined = new Float32Array(frequencies.length);
     const magCurrent = new Float32Array(frequencies.length);
@@ -248,10 +255,6 @@ export default function EqualizerSettings({}) {
                   type: 'UPDATE_SELECTED_FILTER',
                   payload: { ...selectedFilter, filter: 0 },
                 });
-                if (equalizer) {
-                  updateCurrent();
-                  drawCurve();
-                }
               }}
             >
               Band 1
@@ -279,10 +282,6 @@ export default function EqualizerSettings({}) {
                   type: 'UPDATE_SELECTED_FILTER',
                   payload: { ...selectedFilter, filter: 1 },
                 });
-                if (equalizer) {
-                  updateCurrent();
-                  drawCurve();
-                }
               }}
             >
               Band 2
@@ -310,10 +309,6 @@ export default function EqualizerSettings({}) {
                   type: 'UPDATE_SELECTED_FILTER',
                   payload: { ...selectedFilter, filter: 2 },
                 });
-                if (equalizer) {
-                  updateCurrent();
-                  drawCurve();
-                }
               }}
             >
               Band 3
@@ -341,10 +336,6 @@ export default function EqualizerSettings({}) {
                   type: 'UPDATE_SELECTED_FILTER',
                   payload: { ...selectedFilter, filter: 3 },
                 });
-                if (equalizer) {
-                  updateCurrent();
-                  drawCurve();
-                }
               }}
             >
               Band 4
@@ -372,10 +363,6 @@ export default function EqualizerSettings({}) {
                   type: 'UPDATE_SELECTED_FILTER',
                   payload: { ...selectedFilter, filter: 4 },
                 });
-                if (equalizer) {
-                  updateCurrent();
-                  drawCurve();
-                }
               }}
             >
               Band 5
@@ -403,10 +390,6 @@ export default function EqualizerSettings({}) {
                   type: 'UPDATE_SELECTED_FILTER',
                   payload: { ...selectedFilter, filter: 5 },
                 });
-                if (equalizer) {
-                  updateCurrent();
-                  drawCurve();
-                }
               }}
             >
               Band 6

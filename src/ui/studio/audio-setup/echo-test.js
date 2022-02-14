@@ -10,10 +10,9 @@ export default function EchoTest() {
   const state = useStudioState();
   const dispatch = useDispatch();
   const peakMeterRef = useRef();
-  const echoTestRef = useRef();
   const peakMeterLabelRef = useRef();
 
-  const { audioSettings, audioNodes } = state;
+  const { audioSettings } = state;
   let sampleBuffer, requestID, analyser, stream;
 
   const toggleEchoTest = () => {
@@ -22,8 +21,6 @@ export default function EchoTest() {
   };
 
   const startEchoTest = (newState) => {
-    echoTestRef.current.innerText = 'Stop';
-
     analyser = newState[0];
     sampleBuffer = new Float32Array(analyser.fftSize);
 
@@ -43,7 +40,6 @@ export default function EchoTest() {
   const stopEchoTest = async () => {
     closeAudioContext(state, dispatch);
 
-    echoTestRef.current.innerText = 'Echo-Test';
     peakMeterRef.current.value = peakMeterRef.current.min;
     peakMeterLabelRef.current.textContent = '-inf dB';
     cancelAnimationFrame(requestID);
@@ -102,7 +98,6 @@ export default function EchoTest() {
           }}
         >
           <button
-            ref={echoTestRef}
             onClick={toggleEchoTest}
             sx={{
               width: '106px',
@@ -120,7 +115,7 @@ export default function EchoTest() {
               },
             }}
           >
-            Echo-Test
+            {audioSettings.echoTest ? 'Stop' : 'Echo-Test'}
           </button>
         </div>
         <div
