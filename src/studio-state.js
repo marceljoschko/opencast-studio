@@ -26,9 +26,84 @@ const initialState = () => ({
   audioSupported: isUserCaptureSupported(),
 
   audioSettings: {
+    audioContext: null,
+    sampleRate: 48000,
     noiseSuppression: false,
     equalizer: false,
     compressor: false,
+    makeupGain: false,
+    echoTest: false,
+  },
+
+  audioNodes: {
+    rnnoise: null,
+    noiseGate: null,
+    equalizer: null,
+    compressor: null,
+    makeupGain: null,
+    limiter: null,
+    delay: null,
+    analyser: null,
+  },
+
+  echoTestSettings: {
+    delay: 0.3,
+    fftSize: 2048,
+  },
+
+  compressorSettings: {
+    threshold: 60,
+    knee: 6,
+    attack: 0.01,
+    release: 0.15,
+    ratio: 2,
+    makeup: false,
+  },
+
+  selectedFilter: {
+    filter: 0,
+    freq: 80,
+    q: 0,
+    gain: 0,
+  },
+
+  equalizerSettings: {
+    filter0: {
+      type: 'highpass',
+      freq: 80,
+      q: 0,
+      gain: 0,
+    },
+    filter1: {
+      type: 'peaking',
+      freq: 200,
+      q: 0,
+      gain: 0,
+    },
+    filter2: {
+      type: 'peaking',
+      freq: 1000,
+      q: 0,
+      gain: 0,
+    },
+    filter3: {
+      type: 'peaking',
+      freq: 4000,
+      q: 0,
+      gain: 0,
+    },
+    filter4: {
+      type: 'highshelf',
+      freq: 8000,
+      q: 0,
+      gain: 0,
+    },
+    filter5: {
+      type: 'lowpass',
+      freq: 18000,
+      q: 0,
+      gain: 0,
+    },
   },
 
   displayAllowed: null,
@@ -89,6 +164,18 @@ const reducer = (state, action) => {
 
     case 'UPDATE_AUDIO_SETTINGS':
       return { ...state, audioSettings: action.payload };
+
+    case 'UPDATE_AUDIO_NODES':
+      return { ...state, audioNodes: action.payload };
+
+    case 'UPDATE_EQUALIZER_SETTINGS':
+      return { ...state, equalizerSettings: action.payload };
+
+    case 'UPDATE_SELECTED_FILTER':
+      return { ...state, selectedFilter: action.payload };
+
+    case 'UPDATE_COMPRESSOR_SETTINGS':
+      return { ...state, compressorSettings: action.payload };
 
     case 'BLOCK_AUDIO':
       return { ...state, audioStream: null, audioAllowed: false, audioUnexpectedEnd: false };
