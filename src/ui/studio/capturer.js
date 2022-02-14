@@ -11,8 +11,6 @@ export async function startAudioCapture(dispatch, deviceId = null) {
     audio: {
       deviceId: deviceId ? { deviceId } : true,
       channelCount: { ideal: 1 },
-      noiseSuppression: { ideal: false },
-      autoGainControl: { ideal: false },
       sampleRate: { ideal: 48000 },
     },
     video: false,

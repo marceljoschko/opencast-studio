@@ -3,8 +3,7 @@
 // This check could be more exhaustive, but this includes all browser we
 // officially support.
 export const onMobileDevice = () =>
-  /Android|iPhone|iPad|iPod/i.test(navigator.platform) ||
-  /Android/i.test(navigator.userAgent);
+  /Android|iPhone|iPad|iPod/i.test(navigator.platform) || /Android/i.test(navigator.userAgent);
 
 // Checks if the client supports capturing the device's display (or individual
 // windows).
@@ -20,9 +19,7 @@ export const onMobileDevice = () =>
 // revisit this issue again. This is tracked in this issue:
 // https://github.com/elan-ev/opencast-studio/issues/204
 export const isDisplayCaptureSupported = () =>
-  "mediaDevices" in navigator &&
-  "getDisplayMedia" in navigator.mediaDevices &&
-  !onMobileDevice();
+  'mediaDevices' in navigator && 'getDisplayMedia' in navigator.mediaDevices && !onMobileDevice();
 
 // Checks if the client supports capturing "user devices" (usually webcams or
 // phone cameras).
@@ -37,35 +34,35 @@ export const isRecordingSupported = () => typeof MediaRecorder !== 'undefined';
 export const onSafari = () => /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 // Returns the dimensions as [w, h] array or `null` if there is no video track.
-export const dimensionsOf = stream => {
+export const dimensionsOf = (stream) => {
   const { width, height } = stream?.getVideoTracks()?.[0]?.getSettings() ?? {};
   return [width, height];
 };
 
 // Converts the MIME type into a file extension.
-export const mimeToExt = mime => {
+export const mimeToExt = (mime) => {
   if (mime) {
     const lowerMime = mime.toLowerCase();
-    if (lowerMime.startsWith("video/webm")) {
-      return "webm";
+    if (lowerMime.startsWith('video/webm')) {
+      return 'webm';
     }
-    if (lowerMime.startsWith("video/mp4")) {
-      return "mp4";
+    if (lowerMime.startsWith('video/mp4')) {
+      return 'mp4';
     }
-    if (lowerMime.startsWith("video/x-matroska")) {
-      return "mkv";
+    if (lowerMime.startsWith('video/x-matroska')) {
+      return 'mkv';
     }
-    if (lowerMime.startsWith("video/avi")) {
-      return "avi";
+    if (lowerMime.startsWith('video/avi')) {
+      return 'avi';
     }
-    if (lowerMime.startsWith("video/quicktime")) {
-      return "mov";
+    if (lowerMime.startsWith('video/quicktime')) {
+      return 'mov';
     }
   }
 
   // If we know nothing, our best guess is webm; except for Safari which does
   // not understand webm: there it's mp4.
-  return onSafari() ? "mp4" : "webm";
+  return onSafari() ? 'mp4' : 'webm';
 };
 
 // Returns a suitable filename for a recording with the MIME type `mime` and the
@@ -79,15 +76,21 @@ export const recordingFileName = ({ mime, flavor, title, presenter }) => {
 };
 
 const nowAsString = () => {
-  const pad2 = n => (n >= 10 ? '' : '0') + n;
+  const pad2 = (n) => (n >= 10 ? '' : '0') + n;
 
   const now = new Date();
-  return ''
-    + now.getFullYear() + '-'
-    + pad2(now.getMonth() + 1) + '-'
-    + pad2(now.getDate()) + ' '
-    + pad2(now.getHours()) + '-'
-    + pad2(now.getMinutes());
+  return (
+    '' +
+    now.getFullYear() +
+    '-' +
+    pad2(now.getMonth() + 1) +
+    '-' +
+    pad2(now.getDate()) +
+    ' ' +
+    pad2(now.getHours()) +
+    '-' +
+    pad2(now.getMinutes())
+  );
 };
 
 export const userHasWebcam = async () => {
@@ -96,18 +99,18 @@ export const userHasWebcam = async () => {
   }
 
   const devices = await navigator.mediaDevices.enumerateDevices();
-  return devices.some(d => d.kind === 'videoinput');
+  return devices.some((d) => d.kind === 'videoinput');
 };
 
 // Decodes the given hex string into a new string. If the given string contains
 // characters that are not hexadecimal digits or if the string's length is odd,
 // this function will throw an exception.
-export const decodeHexString = hex => {
+export const decodeHexString = (hex) => {
   if (hex.length % 2 !== 0) {
     throw new SyntaxError('hex string does not have an even length');
   }
 
-  const digitToNum = digit => {
+  const digitToNum = (digit) => {
     if (digit >= '0' && digit <= '9') {
       return digit.charCodeAt(0) - '0'.charCodeAt(0);
     } else if (digit >= 'a' && digit <= 'f') {
@@ -121,15 +124,15 @@ export const decodeHexString = hex => {
 
   let bytes = new Uint8Array(hex.length / 2);
   for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = 16 * digitToNum(hex.substring(i, i + 1))
-      + digitToNum(hex.substring(i + 1, i + 2));
+    bytes[i / 2] =
+      16 * digitToNum(hex.substring(i, i + 1)) + digitToNum(hex.substring(i + 1, i + 2));
   }
 
   return new TextDecoder().decode(bytes);
 };
 
 // Returns a promise that resolves after `ms` milliseconds.
-export const sleep = ms => new Promise((resolve, reject) => setTimeout(resolve, ms));
+export const sleep = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
 
 // Obtains all media devices and stores them into the global state.
 export const queryMediaDevices = async (dispatch) => {
@@ -148,7 +151,7 @@ export const getUniqueDevices = (allDevices, kind) => {
     }
 
     // If we already have a device with that device ID, we ignore it.
-    if (out.some(od => od.deviceId === d.deviceId)) {
+    if (out.some((od) => od.deviceId === d.deviceId)) {
       continue;
     }
 

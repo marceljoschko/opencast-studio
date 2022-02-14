@@ -1,5 +1,5 @@
-import RingBuffer from "./ring-buffer";
-import { dBToAmp, ampToDB, timeCoefficient } from "./utils";
+import RingBuffer from "./RingBuffer.js";
+import { dBToAmp, ampToDB, timeCoefficient } from "./utils.js";
 
 class LimiterProcessor extends AudioWorkletProcessor {
     constructor(options) {

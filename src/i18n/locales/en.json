@@ -71,7 +71,7 @@
 
   "sources-audio-question": "Record audio?",
   "sources-audio-microphone": "Microphone",
-  "sources-audio-microphone-selected": "Microphone selected",
+  "sources-audio-microphone-selected": "Audio Settings",
   "sources-audio-without-audio": "Without audio",
   "sources-audio-reselect-audio": "Reselect audio",
   "sources-audio-device": "Device",
