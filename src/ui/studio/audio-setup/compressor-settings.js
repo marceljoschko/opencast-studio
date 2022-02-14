@@ -3,8 +3,8 @@
 import { jsx } from 'theme-ui';
 // eslint-disable-next-line
 import React, { useEffect, useRef } from 'react';
-import Range from './Range';
-import './Switch.css';
+import Range from './range';
+import './audio-setup.css';
 import { useStudioState, useDispatch } from '../../../studio-state';
 
 export default function CompressorSettings({}) {
@@ -21,6 +21,7 @@ export default function CompressorSettings({}) {
   const makeupGain = audioNodes.makeupGain;
   const threshold = compressorSettings.threshold;
 
+  // useEffect hook for changing the makeupgain if the checkbox state has been changed
   useEffect(() => {
     if (compressor) {
       if (!requestID) {
@@ -35,6 +36,7 @@ export default function CompressorSettings({}) {
     }
   }, [compressorSettings, compressor]);
 
+  // Animation frame loop for the reduction meter
   const loop = () => {
     try {
       if (compressor) {

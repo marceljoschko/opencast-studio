@@ -13,19 +13,20 @@ export default function EchoTest() {
   const peakMeterLabelRef = useRef();
 
   const { audioSettings } = state;
-  let sampleBuffer, requestID, analyser, stream;
+  let sampleBuffer, requestID, analyser;
 
   const toggleEchoTest = () => {
     if (!audioSettings.echoTest) handleAudio();
     else stopEchoTest();
   };
 
+  // starts new echo-test and plays audio to the new created stream
+  // TO-DO: reeset meter and label after the Echo-Test has been stopped
   const startEchoTest = (newState) => {
     analyser = newState[0];
     sampleBuffer = new Float32Array(analyser.fftSize);
 
     const audio = new Audio();
-    stream = newState[1];
     audio.srcObject = newState[1];
     audio.play();
 
@@ -53,6 +54,7 @@ export default function EchoTest() {
     peakMeterLabelRef.current.textContent = value.toFixed(1) + ' dB';
   };
 
+  // animation frame loop to visualize the peak of the output signal
   const loop = () => {
     try {
       if (analyser) {
@@ -76,8 +78,6 @@ export default function EchoTest() {
       requestID = null;
     }
   };
-
-  // FRAGMENTS
 
   let echoTest = (
     <Fragment>

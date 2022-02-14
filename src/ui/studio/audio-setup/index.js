@@ -30,8 +30,8 @@ import EchoTest from './echo-test';
 import { createAudioContext } from './audio-context';
 import EqualizerSettings from './equalizer-settings';
 import CompressorSettings from './compressor-settings';
-import Switch from './Switch';
-import './Switch.css';
+import Switch from './switch';
+import './audio-setup.css';
 
 const LAST_AUDIO_DEVICE_KEY = 'ocStudioLastAudioDevice';
 
@@ -147,6 +147,7 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
 
   const Spacer = ({ min, max }) => <div sx={{ flex: 1, maxHeight: max, minHeight: min }} />;
 
+  // Creates new AudioContext with selected audio settings
   const handleAudio = async () => {
     if (audioSettings.noiseSurpression || audioSettings.equalizer || audioSettings.compressor)
       await createAudioContext(state, dispatch, 'live');

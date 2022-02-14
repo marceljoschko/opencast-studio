@@ -68,7 +68,7 @@ export async function createAudioContext(
         makeupGain.gain.value = Math.pow(10, makeup / 20);
       }
     }
-
+    // create audionodes for echo-test
     if (mode === 'echoTest') {
       delay = audioContext.createDelay();
       delay.delayTime.value = echoTestSettings.delay;
@@ -101,15 +101,17 @@ export async function createAudioContext(
       delay: delay,
       analyser: analyser,
     };
-    // Dispatch the new audioStream and audioContext
+    // Dispatch the new audioStream if the mode is set to 'live'
     if (mode === 'live') dispatch({ type: 'UPDATE_AUDIO_STREAM', payload: destination.stream });
     dispatch({
       type: 'UPDATE_AUDIO_SETTINGS',
       payload: { ...audioSettings, audioContext: audioContext, echoTest: true },
     });
+
     dispatch({ type: 'UPDATE_AUDIO_NODES', payload: payload });
 
-    return [analyser, destination.stream, audioContext];
+    // return analyser and new stream for echotest
+    return [analyser, destination.stream];
   } catch (error) {
     console.log(error);
   }

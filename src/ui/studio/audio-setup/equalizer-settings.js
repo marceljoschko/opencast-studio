@@ -4,8 +4,8 @@ import { jsx } from 'theme-ui';
 // eslint-disable-next-line
 import React, { useRef, useEffect } from 'react';
 import { useStudioState, useDispatch } from '../../../studio-state';
-import Range from './Range';
-import './Switch.css';
+import Range from './range';
+import './audio-setup.css';
 
 export default function EqualizerSettings({}) {
   const state = useStudioState();
@@ -27,6 +27,7 @@ export default function EqualizerSettings({}) {
   let noctaves = 12;
   let nyquist = 0.5 * 44100;
 
+  // draws the current curve of all equalizer magnitudes combined in the canvas
   const drawCurve = () => {
     const canvas = canvasRef.current;
     let width = canvas.width;
@@ -100,6 +101,26 @@ export default function EqualizerSettings({}) {
     canvasContext.stroke();
   };
 
+  // returns an array of combined magnitude values of all filter bands
+  const getEqResponse = (frequencies) => {
+    const magCombined = new Float32Array(frequencies.length);
+    const magCurrent = new Float32Array(frequencies.length);
+    const phaseCurrent = new Float32Array(frequencies.length);
+
+    if (equalizer) {
+      for (let i = 0; i < equalizer.eqNodes.length; i++) {
+        equalizer.eqNodes[i].getFrequencyResponse(frequencies, magCurrent, phaseCurrent);
+
+        for (let j = 0; j < frequencies.length; j++) {
+          let magDb = 20.0 * Math.log10(magCurrent[j]);
+          magCombined[j] += magDb;
+        }
+      }
+    }
+
+    return magCombined;
+  };
+
   const choosePreset = async (option) => {
     switch (option) {
       case 'female':
@@ -129,6 +150,7 @@ export default function EqualizerSettings({}) {
     drawCurve();
   };
 
+  // updates the selectedFilter with new filter band values
   const updateCurrent = () => {
     const filterName = 'filter' + currentFilter;
     const payload = {
@@ -156,25 +178,6 @@ export default function EqualizerSettings({}) {
       drawCurve();
     }
   }, [currentFilter]);
-
-  const getEqResponse = (frequencies) => {
-    const magCombined = new Float32Array(frequencies.length);
-    const magCurrent = new Float32Array(frequencies.length);
-    const phaseCurrent = new Float32Array(frequencies.length);
-
-    if (equalizer) {
-      for (let i = 0; i < equalizer.eqNodes.length; i++) {
-        equalizer.eqNodes[i].getFrequencyResponse(frequencies, magCurrent, phaseCurrent);
-
-        for (let j = 0; j < frequencies.length; j++) {
-          let magDb = 20.0 * Math.log10(magCurrent[j]);
-          magCombined[j] += magDb;
-        }
-      }
-    }
-
-    return magCombined;
-  };
 
   return (
     <>

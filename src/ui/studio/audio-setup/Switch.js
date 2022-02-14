@@ -9,13 +9,13 @@ export default function Switch({ echoTest, handleToggle, mode }) {
     <>
       <input
         onChange={handleToggle}
-        className="react-switch-checkbox"
+        className="switch-checkbox"
         id={'switch-' + mode}
         type="checkbox"
         disabled={echoTest ? 'disabled' : ''}
       />
-      <label className="react-switch-label" htmlFor={'switch-' + mode}>
-        <span className={'react-switch-button'} />
+      <label className="switch-label" htmlFor={'switch-' + mode}>
+        <span className={'switch-button'} />
       </label>
     </>
   );
