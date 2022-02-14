@@ -26,7 +26,10 @@ import { queryMediaDevices, getUniqueDevices } from '../../../util';
 
 import PreviewAudio from './preview-audio';
 
+import EchoTest from './echo-test';
 import { createAudioContext } from './audio-context';
+import EqualizerSettings from './equalizer-settings';
+import CompressorSettings from './compressor-settings';
 import Switch from './Switch';
 import './Switch.css';
 
@@ -158,7 +161,14 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
         }}
       >
         <div>
-          <label htmlFor={'switch-noise-suppression'}>Noise Suppression</label>
+          <label
+            sx={{
+              fontWeight: '400',
+            }}
+            htmlFor={'switch-noise-suppression'}
+          >
+            Noise Suppression
+          </label>
         </div>
         <div
           sx={{
@@ -192,7 +202,14 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
         }}
       >
         <div>
-          <label htmlFor={'switch-equalizer'}>Equalizer</label>
+          <label
+            sx={{
+              fontWeight: '400',
+            }}
+            htmlFor={'switch-equalizer'}
+          >
+            Equalizer
+          </label>
         </div>
         <div
           sx={{
@@ -229,7 +246,14 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
         }}
       >
         <div>
-          <label htmlFor={'switch-compressor'}>Dynamic Compression</label>
+          <label
+            sx={{
+              fontWeight: '400',
+            }}
+            htmlFor={'switch-compressor'}
+          >
+            Dynamic Compression
+          </label>
         </div>
         <div
           sx={{
@@ -273,6 +297,7 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
+              fontWeight: '400',
             }}
           >
             {t('sources-audio-device')}:
@@ -290,6 +315,7 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
           </select>
         </div>
         <PreviewAudio stream={audioStream} />
+        <EchoTest />
         <Styled.h2>Audio Processing</Styled.h2>
         <div
           sx={{
@@ -300,7 +326,9 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
         >
           {noiseSwitch}
           {equalizerSwitch}
+          {audioSettings.equalizer && <EqualizerSettings />}
           {compressorSwitch}
+          {audioSettings.compressor && <CompressorSettings />}
         </div>
       </Fragment>
     );

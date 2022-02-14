@@ -15,7 +15,7 @@ export default function PreviewAudio({ stream }) {
       ctx.lineWidth = 2;
       ctx.strokeStyle = '#f1c40f';
 
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const audioContext = new AudioContext({ sampleRate: 48000 });
       const source = audioContext.createMediaStreamSource(stream);
       const scope = new Oscilloscope(source, { fftSize: 1024 });
       scope.animate(ctx);
@@ -34,7 +34,6 @@ export default function PreviewAudio({ stream }) {
         width: '80%',
         maxHeight: '125px',
         minHeight: 0,
-        flex: '1 0 70px',
         bg: 'rgba(0,0,0,0.8)',
         borderRadius: '7px',
       }}

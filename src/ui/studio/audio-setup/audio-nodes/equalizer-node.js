@@ -38,7 +38,7 @@ export default class EqualizerNode {
     for (let i = 0; i < this.eqNodes.length; i++) {
       let preset = jsondata['filter' + i];
       let eqNode = this.eqNodes[i];
-      eqNode.type = preset.type;
+      eqNode.type = preset.type.toString();
       eqNode.frequency.value = preset.freq;
       eqNode.Q.value = preset.q;
       eqNode.gain.value = preset.gain;
@@ -50,7 +50,7 @@ export default class EqualizerNode {
     for (let i = 0; i < this.eqNodes.length; i++) {
       let preset = { type: '', freq: 0, q: 0, gain: 0 };
       let eqNode = this.eqNodes[i];
-      preset.type = eqNode.type;
+      preset.type = eqNode.type.value;
       preset.freq = eqNode.frequency.value;
       preset.q = eqNode.Q.value;
       preset.gain = eqNode.gain.value;
