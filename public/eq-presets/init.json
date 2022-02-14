@@ -1,0 +1,38 @@
+{
+    "filter0": {
+		"type": "highpass",
+		"q": 0,
+		"freq": 100,
+		"gain": 0
+	},
+	"filter1": {
+		"type": "peaking",
+		"q": 0.7,
+		"freq": 350,
+		"gain": 0
+	},
+	"filter2": {
+		"type": "peaking",
+		"q": 0.6,
+		"freq": 1500,
+		"gain": 0
+	},
+	"filter3": {
+		"type": "peaking",
+		"q": 0.6,
+		"freq": 4000,
+		"gain": 0
+	},
+	"filter4": {
+		"type": "highshelf",
+		"q": 0.1,
+		"freq": 8000,
+		"gain": 0
+	},
+	"filter5":{
+		"type": "lowpass",
+		"q": 0,
+		"freq": 18000,
+		"gain": 0
+	}
+}
