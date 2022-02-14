@@ -1,4 +1,4 @@
-import RingBuffer from "./RingBuffer.js";
+import RingBuffer from "./ringbuffer.js";
 import { dBToAmp, ampToDB, timeCoefficient } from "./utils.js";
 
 class LimiterProcessor extends AudioWorkletProcessor {
@@ -47,6 +47,7 @@ class LimiterProcessor extends AudioWorkletProcessor {
         const x = input[0][0],
             y = output[0][0];
 
+        // if the LimiterNode is not connected in the audio-rendering return false to close it
         if (!x) return false;
 
         const envelopeData = this.getEnvelope(x, parameters);

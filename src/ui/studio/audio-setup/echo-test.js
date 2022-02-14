@@ -123,7 +123,7 @@ export default function EchoTest() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            width: '78%',
+            width: '80%',
           }}
         >
           <meter

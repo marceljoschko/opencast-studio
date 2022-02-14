@@ -52,8 +52,10 @@ class NoiseGateProcessor extends AudioWorkletProcessor {
         const x = input[0][0],
             y = output[0][0];
 
+        // if the NoiseGateNode is not connected in the audio-rendering return false to close it
         if (!x) return false;
 
+        // get dynamic characteristics of the input signal
         const envelope = this.getEnvelope(x, parameters);
 
         for (let i = 0; i < x.length; i++) {
