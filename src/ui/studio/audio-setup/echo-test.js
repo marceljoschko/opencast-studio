@@ -13,8 +13,8 @@ export default function EchoTest() {
   const echoTestRef = useRef();
   const peakMeterLabelRef = useRef();
 
-  const { audioSettings } = state;
-  let sampleBuffer, requestID, analyser;
+  const { audioSettings, audioNodes } = state;
+  let sampleBuffer, requestID, analyser, stream;
 
   const toggleEchoTest = () => {
     if (!audioSettings.echoTest) handleAudio();
@@ -28,6 +28,7 @@ export default function EchoTest() {
     sampleBuffer = new Float32Array(analyser.fftSize);
 
     const audio = new Audio();
+    stream = newState[1];
     audio.srcObject = newState[1];
     audio.play();
 
@@ -39,13 +40,16 @@ export default function EchoTest() {
     startEchoTest(newState);
   };
 
-  const stopEchoTest = () => {
+  const stopEchoTest = async () => {
     closeAudioContext(state, dispatch);
 
     echoTestRef.current.innerText = 'Echo-Test';
     peakMeterRef.current.value = peakMeterRef.current.min;
     peakMeterLabelRef.current.textContent = '-inf dB';
     cancelAnimationFrame(requestID);
+    requestID = null;
+    analyser = null;
+    sampleBuffer = null;
   };
 
   const displayNumber = (value) => {
@@ -54,20 +58,27 @@ export default function EchoTest() {
   };
 
   const loop = () => {
-    analyser.getFloatTimeDomainData(sampleBuffer);
+    try {
+      if (analyser) {
+        analyser.getFloatTimeDomainData(sampleBuffer);
 
-    // Compute peak instantaneous power over the interval.
-    let peakInstantaneousPower = 0;
-    for (let i = 0; i < sampleBuffer.length; i++) {
-      const power = sampleBuffer[i] ** 2;
-      peakInstantaneousPower = Math.max(power, peakInstantaneousPower);
+        // Compute peak instantaneous power over the interval.
+        let peakInstantaneousPower = 0;
+        for (let i = 0; i < sampleBuffer.length; i++) {
+          const power = sampleBuffer[i] ** 2;
+          peakInstantaneousPower = Math.max(power, peakInstantaneousPower);
+        }
+        const peakInstantaneousPowerDecibels = 10 * Math.log10(peakInstantaneousPower);
+
+        if (isFinite(peakInstantaneousPowerDecibels)) displayNumber(peakInstantaneousPowerDecibels);
+        else displayNumber(peakMeterRef.current.min);
+
+        requestID = requestAnimationFrame(loop);
+      }
+    } catch (error) {
+      cancelAnimationFrame(requestID);
+      requestID = null;
     }
-    const peakInstantaneousPowerDecibels = 10 * Math.log10(peakInstantaneousPower);
-
-    if (isFinite(peakInstantaneousPowerDecibels)) displayNumber(peakInstantaneousPowerDecibels);
-    else displayNumber(peakMeterRef.current.min);
-
-    requestID = requestAnimationFrame(loop);
   };
 
   // FRAGMENTS
@@ -116,13 +127,14 @@ export default function EchoTest() {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            width: '80%',
+            justifyContent: 'space-between',
+            width: '78%',
           }}
         >
           <meter
             sx={{
               display: 'flex',
-              flex: '1 0 auto',
+              width: '450px',
               height: '100%',
             }}
             ref={peakMeterRef}
@@ -135,7 +147,7 @@ export default function EchoTest() {
           <span
             sx={{
               display: 'flex',
-              paddingLeft: '16px',
+              paddingLeft: '20px',
             }}
             ref={peakMeterLabelRef}
           >

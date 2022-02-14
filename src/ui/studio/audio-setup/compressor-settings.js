@@ -13,7 +13,7 @@ export default function CompressorSettings({}) {
   const reductionMeterRef = useRef();
   const reductionMeterLabelRef = useRef();
 
-  const { compressorSettings, audioNodes } = state;
+  const { compressorSettings, audioNodes, audioSettings } = state;
 
   let requestID;
 
@@ -23,7 +23,6 @@ export default function CompressorSettings({}) {
 
   useEffect(() => {
     if (compressor) {
-      compressor.threshold.value = compressorSettings.threshold;
       if (!requestID) {
         loop();
       }
@@ -34,15 +33,18 @@ export default function CompressorSettings({}) {
         makeupGain.gain.value = 1;
       }
     }
-  }, [compressorSettings]);
+  }, [compressorSettings, compressor]);
 
   const loop = () => {
-    if (compressor) {
-      reductionMeterRef.current.value = Math.abs(compressor.reduction);
-      reductionMeterLabelRef.current.innerText = Math.abs(compressor.reduction).toFixed(2);
-      requestID = requestAnimationFrame(loop);
-    } else {
+    try {
+      if (compressor) {
+        reductionMeterRef.current.value = Math.abs(compressor.reduction);
+        reductionMeterLabelRef.current.innerText = Math.abs(compressor.reduction).toFixed(2);
+        requestID = requestAnimationFrame(loop);
+      }
+    } catch (error) {
       cancelAnimationFrame(requestID);
+      requestID = null;
     }
   };
 
@@ -91,6 +93,9 @@ export default function CompressorSettings({}) {
                       type: 'UPDATE_COMPRESSOR_SETTINGS',
                       payload: { ...compressorSettings, threshold: parseInt(e.target.value - 60) },
                     });
+                    if (compressor) {
+                      compressor.threshold.value = compressorSettings.threshold;
+                    }
                   }}
                   min={0}
                   max={60}

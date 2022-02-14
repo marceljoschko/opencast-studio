@@ -57,7 +57,6 @@ export async function createAudioContext(
       compressor = audioContext.createDynamicsCompressor();
       makeupGain = audioContext.createGain();
       limiter = new LimiterNode(audioContext);
-      console.log(compressorSettings);
       compressor.threshold.value = compressorSettings.threshold;
       compressor.knee.value = compressorSettings.knee;
       compressor.ratio.value = compressorSettings.ratio;
