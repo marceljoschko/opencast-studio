@@ -50,8 +50,11 @@ class LimiterProcessor extends AudioWorkletProcessor {
         // if the LimiterNode is not connected in the audio-rendering return false to close it
         if (!x) return false;
 
+        // get the dynamic characteristics of the signal based on attack and release parameter
         const envelopeData = this.getEnvelope(x, parameters);
 
+        // pushes input samples in the ringbuffer
+        // pulls output samples from the ringbuffer
         if (this.lookAhead > 0) {
             for (let i = 0; i < x.length; i++) {
                 this.ringBuffer.push(x[i]);
@@ -59,6 +62,7 @@ class LimiterProcessor extends AudioWorkletProcessor {
             }
         }
 
+        // the lookahead effect is made by applying the envelope characteristics from a current input to samples which have been buffered
         for (let i = 0; i < x.length; i++) {
             let gainDB = parameters["threshold"][0] - ampToDB(envelopeData[i]);
             gainDB = Math.min(parameters["ceiling"][0], gainDB);
