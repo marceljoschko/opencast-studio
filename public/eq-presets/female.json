@@ -1,7 +1,7 @@
 {
     "filter0": {
 		"type": "highpass",
-		"q": -2,
+		"q": 0,
 		"freq": 100,
 		"gain": 0
 	},
@@ -31,7 +31,7 @@
 	},
 	"filter5":{
 		"type": "lowpass",
-		"q": -2,
+		"q": 0,
 		"freq": 18000,
 		"gain": 0
 	}
