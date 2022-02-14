@@ -12,7 +12,6 @@ export default function CompressorSettings({}) {
   const dispatch = useDispatch();
   const reductionMeterRef = useRef();
   const reductionMeterLabelRef = useRef();
-  const thresholdLabelRef = useRef();
 
   const { compressorSettings, audioNodes } = state;
 
@@ -90,12 +89,12 @@ export default function CompressorSettings({}) {
                   handleChange={(e) => {
                     dispatch({
                       type: 'UPDATE_COMPRESSOR_SETTINGS',
-                      payload: { ...compressorSettings, threshold: parseInt(e.target.value) },
+                      payload: { ...compressorSettings, threshold: parseInt(e.target.value - 60) },
                     });
                   }}
                   min={0}
                   max={60}
-                  value={threshold}
+                  value={threshold + 60}
                   width={80}
                 />
                 <span
@@ -103,7 +102,7 @@ export default function CompressorSettings({}) {
                     paddingLeft: '20px',
                   }}
                 >
-                  {threshold - 60}
+                  {threshold}
                 </span>
               </div>
             </div>

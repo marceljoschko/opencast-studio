@@ -56,16 +56,8 @@ export default function EqualizerSettings({}) {
       canvasContext.lineTo(x, height);
       canvasContext.stroke();
 
-      let f = nyquist * Math.pow(2.0, octave - noctaves);
-      let value = f.toFixed(0);
-      let unit = 'Hz';
-      if (f > 1000) {
-        unit = 'KHz';
-        value = (f / 1000).toFixed(1);
-      }
       canvasContext.textAlign = 'center';
       canvasContext.strokeStyle = gridColor;
-      //canvasContext.strokeText(value + unit, x, height - 10);
     }
 
     // Draw 0dB line.
@@ -75,11 +67,9 @@ export default function EqualizerSettings({}) {
     canvasContext.stroke();
 
     // Draw decibel scale.
-
     for (let db = -dbScale; db <= dbScale; db += 6) {
       let y = dbToY(db);
       canvasContext.strokeStyle = textColor;
-      //canvasContext.strokeText(db.toFixed(0) + 'dB', 40, y);
       canvasContext.strokeStyle = gridColor;
       canvasContext.beginPath();
       canvasContext.moveTo(0, y);
@@ -103,7 +93,7 @@ export default function EqualizerSettings({}) {
     for (let i = 0; i < width; ++i) {
       let x = i;
       let y = dbToY(dbResponse[i]);
-      if (i == 0) canvasContext.moveTo(x, y);
+      if (i === 0) canvasContext.moveTo(x, y);
       else canvasContext.lineTo(x, y);
     }
 
@@ -159,34 +149,6 @@ export default function EqualizerSettings({}) {
       updateCurrent();
     }
   }, [audioNodes]);
-
-  useEffect(() => {
-    if (equalizer) {
-      updateCurrent();
-      drawCurve();
-    }
-  }, [currentFilter]);
-
-  useEffect(() => {
-    if (equalizer) {
-      equalizer.frequencyHandler(currentFilter, currentFreq);
-      drawCurve();
-    }
-  }, [currentFreq]);
-
-  useEffect(() => {
-    if (equalizer) {
-      equalizer.resonanceHandler(currentFilter, currentGain);
-      drawCurve();
-    }
-  }, [currentQ]);
-
-  useEffect(() => {
-    if (equalizer) {
-      equalizer.gainHandler(currentFilter, currentGain);
-      drawCurve();
-    }
-  }, [currentGain]);
 
   const getEqResponse = (frequencies) => {
     const magCombined = new Float32Array(frequencies.length);
@@ -286,6 +248,10 @@ export default function EqualizerSettings({}) {
                   type: 'UPDATE_SELECTED_FILTER',
                   payload: { ...selectedFilter, filter: 0 },
                 });
+                if (equalizer) {
+                  updateCurrent();
+                  drawCurve();
+                }
               }}
             >
               Band 1
@@ -313,6 +279,10 @@ export default function EqualizerSettings({}) {
                   type: 'UPDATE_SELECTED_FILTER',
                   payload: { ...selectedFilter, filter: 1 },
                 });
+                if (equalizer) {
+                  updateCurrent();
+                  drawCurve();
+                }
               }}
             >
               Band 2
@@ -340,6 +310,10 @@ export default function EqualizerSettings({}) {
                   type: 'UPDATE_SELECTED_FILTER',
                   payload: { ...selectedFilter, filter: 2 },
                 });
+                if (equalizer) {
+                  updateCurrent();
+                  drawCurve();
+                }
               }}
             >
               Band 3
@@ -367,6 +341,10 @@ export default function EqualizerSettings({}) {
                   type: 'UPDATE_SELECTED_FILTER',
                   payload: { ...selectedFilter, filter: 3 },
                 });
+                if (equalizer) {
+                  updateCurrent();
+                  drawCurve();
+                }
               }}
             >
               Band 4
@@ -394,6 +372,10 @@ export default function EqualizerSettings({}) {
                   type: 'UPDATE_SELECTED_FILTER',
                   payload: { ...selectedFilter, filter: 4 },
                 });
+                if (equalizer) {
+                  updateCurrent();
+                  drawCurve();
+                }
               }}
             >
               Band 5
@@ -421,6 +403,10 @@ export default function EqualizerSettings({}) {
                   type: 'UPDATE_SELECTED_FILTER',
                   payload: { ...selectedFilter, filter: 5 },
                 });
+                if (equalizer) {
+                  updateCurrent();
+                  drawCurve();
+                }
               }}
             >
               Band 6
@@ -454,6 +440,10 @@ export default function EqualizerSettings({}) {
                     type: 'UPDATE_SELECTED_FILTER',
                     payload: { ...selectedFilter, freq: parseInt(e.target.value) },
                   });
+                  if (equalizer) {
+                    equalizer.frequencyHandler(currentFilter, currentFreq);
+                    drawCurve();
+                  }
                 }}
                 min={20}
                 max={20000}
@@ -475,16 +465,20 @@ export default function EqualizerSettings({}) {
                 handleChange={(e) => {
                   dispatch({
                     type: 'UPDATE_SELECTED_FILTER',
-                    payload: { ...selectedFilter, gain: parseInt(e.target.value) },
+                    payload: { ...selectedFilter, gain: parseInt(e.target.value - 12) },
                   });
+                  if (equalizer) {
+                    equalizer.gainHandler(currentFilter, currentGain);
+                    drawCurve();
+                  }
                 }}
                 min={0}
                 max={24}
-                value={currentGain}
+                value={currentGain + 12}
                 width={100}
                 margin={8}
               />
-              <span>{currentGain - 12}</span>
+              <span>{currentGain}</span>
             </div>
             <div
               sx={{
@@ -500,6 +494,10 @@ export default function EqualizerSettings({}) {
                     type: 'UPDATE_SELECTED_FILTER',
                     payload: { ...selectedFilter, q: parseFloat(e.target.value) },
                   });
+                  if (equalizer) {
+                    equalizer.resonanceHandler(currentFilter, currentQ);
+                    drawCurve();
+                  }
                 }}
                 min={0}
                 max={2}

@@ -52,7 +52,7 @@ const initialState = () => ({
   },
 
   compressorSettings: {
-    threshold: 60,
+    threshold: 0,
     knee: 6,
     attack: 0.01,
     release: 0.15,

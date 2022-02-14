@@ -48,8 +48,8 @@ export async function createAudioContext(
 
     if (audioSettings.equalizer) {
       equalizer = new EqualizerNode(audioContext);
-      equalizerFirst = equalizer.getEqNode(0);
-      equalizerLast = equalizer.getEqNode(5);
+      equalizerFirst = equalizer.getEqNode(5);
+      equalizerLast = equalizer.getEqNode(0);
       equalizer.loadPreset(equalizerSettings);
     }
 

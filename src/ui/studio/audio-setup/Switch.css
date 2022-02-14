@@ -81,3 +81,7 @@
       left 350ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
       bottom 350ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   }
+
+  meter::-webkit-meter-optimum-value {
+    background: #47af7a;
+  }
