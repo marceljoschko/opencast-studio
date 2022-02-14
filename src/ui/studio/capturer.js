@@ -6,12 +6,12 @@ const mergeHeightConstraint = (maxHeight, videoConstraints, fallbackIdeal) => {
   return { height: { ...maxField, ...idealField } };
 };
 
-export async function startAudioCapture(dispatch, deviceId = null) {
+export async function startAudioCapture(dispatch, deviceId = null, sampleRate = 48000) {
   const constraints = {
     audio: {
       deviceId: deviceId ? { deviceId } : true,
       channelCount: { ideal: 1 },
-      sampleRate: { ideal: 48000 },
+      sampleRate: { ideal: sampleRate },
     },
     video: false,
   };

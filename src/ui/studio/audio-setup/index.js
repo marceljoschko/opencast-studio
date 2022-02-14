@@ -39,7 +39,7 @@ const LAST_AUDIO_DEVICE_KEY = 'ocStudioLastAudioDevice';
 // selected' or 'microphone selected') and renders the correct component.
 export default function AudioSetup(props) {
   const dispatch = useDispatch();
-  const { audioStream, audioChoice } = useStudioState();
+  const { audioStream, audioChoice, audioSettings } = useStudioState();
 
   const backToVideoSetup = () => props.previousStep();
   const enterStudio = () => props.nextStep();
@@ -48,7 +48,11 @@ export default function AudioSetup(props) {
   const selectMicrophone = async () => {
     dispatch({ type: 'CHOOSE_AUDIO', payload: AUDIO_SOURCE_MICROPHONE });
     const deviceId = window.localStorage.getItem(LAST_AUDIO_DEVICE_KEY);
-    await startAudioCapture(dispatch, deviceId ? { ideal: deviceId } : null);
+    await startAudioCapture(
+      dispatch,
+      deviceId ? { ideal: deviceId } : null,
+      audioSettings.sampleRate
+    );
     await queryMediaDevices(dispatch);
   };
   const reselectSource = () => {
