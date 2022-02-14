@@ -18,7 +18,7 @@ class RNNoiseProcessor extends AudioWorkletProcessor {
         this.heapAudioBuffer = new Float32Array(
             this.instance.memory.buffer,
             this.instance.getBufferAddress(),
-            32768
+            this.instance.getBufferSize()
         );
     }
 
