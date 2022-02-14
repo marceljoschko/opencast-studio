@@ -7,6 +7,7 @@ import { useStudioState, useDispatch } from '../../../studio-state';
 import Range from './range';
 import './audio-setup.css';
 
+// Equalizer settings for changing parameters and visualizing the magnitude in a canvas
 export default function EqualizerSettings({}) {
   const state = useStudioState();
   const dispatch = useDispatch();

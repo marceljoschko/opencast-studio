@@ -7,6 +7,7 @@ import Range from './range';
 import './audio-setup.css';
 import { useStudioState, useDispatch } from '../../../studio-state';
 
+// Compressor settings for changing the threshold based on a reduction peak meter
 export default function CompressorSettings({}) {
   const state = useStudioState();
   const dispatch = useDispatch();

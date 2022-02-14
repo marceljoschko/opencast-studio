@@ -3,6 +3,7 @@ import LimiterNode from './audio-nodes/limiter-node';
 import RNNoiseNode from './audio-nodes/rnnoise-node';
 import EqualizerNode from './audio-nodes/equalizer-node';
 
+// Create a new AudioContext with current state audio tool parameters
 export async function createAudioContext(
   { audioStream, audioSettings, compressorSettings, equalizerSettings, echoTestSettings },
   dispatch,
@@ -117,6 +118,7 @@ export async function createAudioContext(
   }
 }
 
+// Closes the AudioContext and resets all AudioNodes
 export function closeAudioContext({ audioSettings }, dispatch) {
   if (audioSettings.audioContext) audioSettings.audioContext.close();
 
