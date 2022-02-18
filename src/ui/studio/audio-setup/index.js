@@ -149,7 +149,7 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
 
   // Creates new AudioContext with selected audio settings
   const handleAudio = async () => {
-    if (audioSettings.noiseSurpression || audioSettings.equalizer || audioSettings.compressor)
+    if (audioSettings.noiseSuppression || audioSettings.equalizer || audioSettings.compressor)
       await createAudioContext(state, dispatch, 'live');
     enterStudio();
   };
